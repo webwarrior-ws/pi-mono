@@ -1,5 +1,5 @@
-import { Model } from "@knocte/pi-ai";
-import type { ExtensionAPI } from "awto-pi-lot";
+import { Model } from "@mariozechner/pi-ai";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 async function fetchPPQModels(): Promise<Model<any>[]> {
     try {
