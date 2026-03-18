@@ -1,6 +1,6 @@
 {
   "name": "awto-pi-lot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "description": "pi-coding-agent extension that adds PPQ.ai provider and default AutoClaw model",
   "main": "./dist/index.js",
