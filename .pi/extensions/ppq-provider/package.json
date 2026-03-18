@@ -2,7 +2,7 @@
   "name": "awto-pi-lot",
   "version": "0.0.1",
   "type": "module",
-  "description": "PPQ.ai provider for pi-coding-agent",
+  "description": "pi-coding-agent extension that adds PPQ.ai provider and default AutoClaw model",
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js"
@@ -17,7 +17,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
-    "@knocte/pi-ai": "*",
-    "awto-pi-lot": "*"
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*"
   }
 }
