@@ -3,15 +3,21 @@
   "version": "0.0.1",
   "type": "module",
   "description": "PPQ.ai provider for pi-coding-agent",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "pi": {
     "extensions": [
-      "./index.ts"
+      "./dist/index.js"
     ]
   },
   "scripts": {
+    "build": "../../../node_modules/esbuild/bin/esbuild index.ts --bundle=false --format=esm --platform=node --outdir=dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "dependencies": {
-    "@anthropic-ai/sdk": "^0.52.0"
+  "peerDependencies": {
+    "@knocte/pi-ai": "*",
+    "awto-pi-lot": "*"
   }
 }
