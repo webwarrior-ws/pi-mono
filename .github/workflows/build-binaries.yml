@@ -39,23 +39,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish pi-ai to npm
-        run: npm publish --workspace packages/ai --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish pi-tui to npm
-        run: npm publish --workspace packages/tui --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish pi-agent-core to npm
-        run: npm publish --workspace packages/agent --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Publish awto-pi-lot to npm
-        run: npm publish --workspace packages/coding-agent --access public
+        run: npm publish --workspace .pi/extensions/ppq-provider --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

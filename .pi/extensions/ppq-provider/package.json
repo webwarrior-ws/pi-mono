@@ -1,0 +1,17 @@
+{
+  "name": "awto-pi-lot",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "PPQ.ai provider for pi-coding-agent",
+  "pi": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
+  }
+}
