@@ -1,6 +1,6 @@
 {
   "name": "awto-pi-lot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "description": "pi-coding-agent extension that adds PPQ.ai provider and default AutoClaw model",
   "pi": {
@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "build": "../../../node_modules/esbuild/bin/esbuild index.ts --bundle=false --format=esm --platform=node --outdir=dist",
+    "build": "../node_modules/esbuild/bin/esbuild index.ts --bundle=false --format=esm --platform=node --outdir=dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "peerDependencies": {
