@@ -1,5 +1,5 @@
 import { Model } from "@mariozechner/pi-ai";
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, ExtensionHandler, SessionStartEvent } from "@mariozechner/pi-coding-agent";
 
 async function fetchPPQModels(): Promise<Model<any>[]> {
     try {
@@ -30,7 +30,7 @@ async function fetchPPQModels(): Promise<Model<any>[]> {
             });
         }
         
-        // Set "autoclaw" to be the first model (selected by default)
+        // Set "autoclaw" to be the first model
         models.sort((a, b) => a.name == "autoclaw" ? -1 : (b.name == "autoclaw" ? 1 : 0));
 
         console.log(`Fetched ${models.length} models from PPQ.ai`);
@@ -50,4 +50,12 @@ export default async function (pi: ExtensionAPI) {
         apiKey: "PPQ_API_KEY",
         models: models
     });
+
+    const handler : ExtensionHandler<SessionStartEvent> =  async (_event, ctx) => { 
+        const autoclawModel = ctx.modelRegistry.find("ppq", "autoclaw");
+        if (autoclawModel) {
+            await pi.setModel(autoclawModel);
+        }
+    };
+    pi.on("session_start", handler);
 }
