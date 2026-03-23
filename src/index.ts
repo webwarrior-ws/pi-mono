@@ -1,5 +1,5 @@
 import { Model } from "@mariozechner/pi-ai";
-import type { ExtensionAPI, ExtensionHandler, SessionStartEvent } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI, ExtensionHandler, SessionStartEvent, ExtensionContext } from "@mariozechner/pi-coding-agent";
 
 async function fetchPPQModels(): Promise<Model<any>[]> {
     try {
@@ -41,21 +41,50 @@ async function fetchPPQModels(): Promise<Model<any>[]> {
     }
 }
 
-export default async function (pi: ExtensionAPI) {
-    const models = await fetchPPQModels();
+const extensionInstalledCustomType = "ppq-extension-installed";
 
-    pi.registerProvider("ppq", {
-        baseUrl: "https://api.ppq.ai",
-        api: "openai-completions",
-        apiKey: "PPQ_API_KEY",
-        models: models
-    });
+interface ExtensionInstalledData {
+    lastUpdateTimestamp: number
+}
 
-    const handler : ExtensionHandler<SessionStartEvent> =  async (_event, ctx) => { 
-        const autoclawModel = ctx.modelRegistry.find("ppq", "autoclaw");
-        if (autoclawModel) {
-            await pi.setModel(autoclawModel);
+function getExtensionInstlledEntryData(ctx: ExtensionContext) {
+    for (const entry of ctx.sessionManager.getEntries()) {
+        if (entry.type == "custom" && entry.customType == extensionInstalledCustomType) {
+            console.log(`entry(custom): ${JSON.stringify(entry)}`);
+            return entry.data as ExtensionInstalledData;
         }
+    }
+    return null;
+}
+
+export default async function (pi: ExtensionAPI) {
+    const onSessionStart : ExtensionHandler<SessionStartEvent> =  async (_event, ctx) => { 
+        const savedData = getExtensionInstlledEntryData(ctx);
+        const millisecondsInDay = 24 * 60 * 60 * 1000;
+        const oneDayAgo = Date.now() - millisecondsInDay;
+        if (savedData !== null && savedData.lastUpdateTimestamp > oneDayAgo) {
+            return;
+        }
+        
+        const models = await fetchPPQModels();
+
+        pi.registerProvider("ppq", {
+            baseUrl: "https://api.ppq.ai",
+            api: "openai-completions",
+            apiKey: "PPQ_API_KEY",
+            models: models
+        });
+
+        const dataToSave : ExtensionInstalledData = { lastUpdateTimestamp: Date.now() };
+        pi.appendEntry(extensionInstalledCustomType, dataToSave);
+        getExtensionInstlledEntryData(ctx);
+        console.log(`something`);
+
+        const autoclawModel = ctx.modelRegistry.find("ppq", "autoclaw");
+        if (savedData === null && autoclawModel) {
+            await pi.setModel(autoclawModel);
+        }            
     };
-    pi.on("session_start", handler);
+
+    pi.on("session_start", onSessionStart);
 }
